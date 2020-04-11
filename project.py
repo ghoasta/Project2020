@@ -1,3 +1,5 @@
+import sys 
+
 def login_screen():
 	name = input("Name: ")
 	pwd = input("Password: ")
@@ -12,24 +14,34 @@ def login_screen():
 		line = connection.readline().rstrip()
 		pwd_list.append(line)
 	temp=0
+	z =0 
 	for i in range(len(name_list)):
 		if (name == name_list[i]) and (pwd == pwd_list[i]):
-			temp=temp+1
-			print(f"\nWelcome {name}")
-			main_menu()
+			main_menu(name)
+			break
+	print("Module Record System -Options")
+
+def main_menu(name):
+	print(f"\nWelcome {name}")
+	while True:
+		print("\nModule Record System - Options")
+		print("-"*20)
+		print("1. Record Attendance")
+		print("2. Generate Statistics")
+		print("3. Exit")
+		menu = input("> ")
+
+		if menu == "1":
+			print("Recording Attendance")
+		elif menu == "2":
+			print("Generate Statistics")
+		elif menu == "3":
 			break
 		else:
-			if temp!=0:
-				print("Module Record System - Login Failed")	
+			print("\nPlease choose valid option")			
 
-def main_menu():
-	print("\nModule Record System - Options")
-	print("-"*20)
-	print("1. Record Attendance")
-	print("2. Generate Statiscic")
-	print("3. Exit")
-
-
+	sys.exit()
+			
 def main():
 	login_screen()
 
