@@ -1,7 +1,20 @@
-import sys 
+import sys #importing sys to be able to exit app on invalid creditentials in login function
 
-def login_screen():
-	name = input("Name: ")
+def load_module(purpose):
+	print(f"\nModule Record System({purpose}) -Choose a Module")
+	print("-"*30)	
+	modules_list = []
+	with open('modules.txt','r') as f:	#displaying the modules code from modules.txt
+		for line in f:
+			x = (line.split(',')[0])
+			modules_list.append(x)	
+	for i in range(len(modules_list)):
+		print(modules_list[i])		
+	menu_module = input("> ")
+	return 
+
+def login():
+	name = input("\nName: ")
 	pwd = input("Password: ")
 	connection = open("login_data.txt")
 	name_list = []
@@ -13,15 +26,16 @@ def login_screen():
 		name_list.append(line)
 		line = connection.readline().rstrip()
 		pwd_list.append(line)
-	temp=0
-	z =0 
+		temp = -1
 	for i in range(len(name_list)):
 		if (name == name_list[i]) and (pwd == pwd_list[i]):
-			main_menu(name)
-			break
-	print("Module Record System -Options")
+			temp = i
+	if temp == -1:		
+		sys.exit("\nModule Record System – Login Failed")
+	else: 
+		return name_list[temp]	
 
-def main_menu(name):
+def main_menu(name): #main function to display main menu
 	print(f"\nWelcome {name}")
 	while True:
 		print("\nModule Record System - Options")
@@ -32,17 +46,16 @@ def main_menu(name):
 		menu = input("> ")
 
 		if menu == "1":
-			print("Recording Attendance")
+			load_module("Attendance")
 		elif menu == "2":
-			print("Generate Statistics")
+			load_module("Statistics")
 		elif menu == "3":
 			break
 		else:
 			print("\nPlease choose valid option")			
-
-	sys.exit()
 			
 def main():
-	login_screen()
+	name = login()
+	main_menu(name)
 
 main()	
