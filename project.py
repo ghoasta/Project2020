@@ -1,19 +1,40 @@
 import sys #importing sys to be able to exit app on invalid creditentials in login function
+import datetime #importing to get the todays date
 
+def str_list_to_int_list(str_list):
+    i = 0
+    while i < len(str_list):
+        str_list[i] = int(str_list[i])
+        i += 1
+    return str_list 
 
 def create_student_list(filename):
 	student_list = []
+	present_list = []
+	absent_list = []
+	excused_list = []
+
 	with open (filename,'r') as f:
 		for line in f:
-			x = (line.split(',')[0])
+			x = (line.split(',')[0].rstrip())
+			y = (line.split(',')[1].rstrip())
+			z = (line.split(',')[2].rstrip())
+			q = (line.split(',')[3].rstrip())
 			student_list.append(x)
-	return student_list		
+			present_list.append(y)
+			absent_list.append(z)
+			excused_list.append(q)
+	
+	present_list = str_list_to_int_list(present_list)
+	absent_list = str_list_to_int_list(absent_list)
+	excused_list = str_list_to_int_list(excused_list)
 
+	return student_list,present_list,absent_list,excused_list		
 
 def take_class_attendance(filename,module_code,purpose):
 	print(f"\nModule Record System({purpose}) {module_code}")
 	print("-"*30)
-	student_list = create_student_list(filename)
+	student_list,present_list,absent_list,excused_list = create_student_list(filename)
 	print(f"There are {len(student_list)} students enrolled.")
 	for i in range(len(student_list)):
 		print(f"Student #{i+1}: {student_list[i]}")
@@ -23,21 +44,27 @@ def take_class_attendance(filename,module_code,purpose):
 		atten = input("> ")
 
 def get_class_attendance(filename,module_code,purpose):
-	student_list = create_student_list(filename)
+	student_list,present_list,absent_list,excused_list = create_student_list(filename)
 	print(f"Module: {module_code}")
 	print(f"Number of students: {len(student_list)}")
-	print(f"Number of classes: ")
-	print(f"Avarage Attendance: ")
+	print(f"Number of classes: {max(present_list)}")
+	print(f"Avarage Attendance: {sum(present_list)/len(present_list)} days")
 	print(f"Low Attender(s): under 70.0 %")
 	print(f"")
 	print(f"Non Attender(s):")
 	print(f"")
 	print(f"Best Attender(s):")
 	print(f"")
+	print(present_list)
+	print(absent_list)
+	print(excused_list)
+	new_filename = module_code+"_"+(datetime.date.today().strftime("%d-%m-%Y"))+".txt"
+	print(new_filename)
+
 
 
 def load_module(purpose):
-	print(f"\nModule Record System({purpose}) -Choose a Module")
+	print(f"\nModule Record System({purpose}) - Choose a Module")
 	print("-"*30)	
 	modules_list = []
 	with open('modules.txt','r') as f:	#displaying the modules code from modules.txt
