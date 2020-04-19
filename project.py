@@ -124,15 +124,22 @@ def load_module(purpose):
 	print(f"\nModule Record System({purpose}) - Choose a Module")
 	print("-"*30)	
 	modules_list = []
-	with open('modules.txt','r') as f:	#displaying the modules code from modules.txt
-		for line in f:
-			x = (line.split(',')[0])
-			modules_list.append(x)	
-	for i in range(len(modules_list)):
-		print(modules_list[i])		
-	menu_module = int(input("> "))
-	filename = modules_list[menu_module-1]+".txt"
-	module_code = modules_list[menu_module-1]
+	while True:
+		with open('modules.txt','r') as f:	#displaying the modules code from modules.txt
+			for line in f:
+				x = (line.split(',')[0])
+				modules_list.append(x)	
+		for i in range(len(modules_list)):
+			print(f"{i+1}. {modules_list[i]}")		
+		menu_module = input("> ")
+		if ((menu_module == "1") or (menu_module == "2")):
+			m = int(menu_module)
+			filename = modules_list[m-1]+".txt"
+			module_code = modules_list[m-1]
+			break
+		else:
+			modules_list = []
+			print("Please choose valid option")
 	return filename,module_code
 
 def login():
