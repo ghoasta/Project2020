@@ -1,0 +1,11 @@
+Module: SOFT_6018
+Number of students: 3
+Number of classes: 10
+Avarage Attendance: 6.0 days
+Low Attender(s): under 70.0 %
+	Alan Wilson
+Non Attender(s):
+	Alan Wilson
+Best Attender(s):
+	Attended 10/11 days
+	Mary Martin

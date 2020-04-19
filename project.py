@@ -37,21 +37,40 @@ def create_student_list(filename):
 def take_class_attendance(filename,module_code,purpose):
 	print(f"\nModule Record System({purpose}) {module_code}")
 	print("-"*30)
-	student_list,present_list,absent_list,excused_list = create_student_list(filename)
+	student_list,present_list,absent_list,excused_list,target_percent,total_days = create_student_list(filename)
 	print(f"There are {len(student_list)} students enrolled.")
+
 	for i in range(len(student_list)):
-		print(f"Student #{i+1}: {student_list[i]}")
-		print("1. Present")
-		print("2. Absent")
-		print("3. Excused")
-		atten = input("> ")
+		while True:
+			print(f"Student #{i+1}: {student_list[i]}")
+			print("1. Present")
+			print("2. Absent")
+			print("3. Excused")
+			atten = input("> ")
+			if atten == "1":
+				present_list[i]+=1
+				break
+			elif atten == "2":
+				absent_list[i]+=1
+				break
+			elif atten == "3":
+				excused_list[i]+=1
+				break
+			else:
+				print("Valid number only")	
+
+	output = open(filename,'w')
+	for i in range(len(student_list)):
+		print((student_list[i]+","+str(present_list[i])+","+str(absent_list[i])+","+str(excused_list[i])),file=output)
 
 def non_attander(student_list,present_list):
 	non_attander =[]
 	for i in range(len(student_list)):
 		if present_list[i] == 0:
 			non_attander.append(student_list[i])
-	return non_attander
+	if not non_attander:
+		non_attander.append("None")
+	return non_attander	
 
 def calc_seventy_percent(student_list,absent_list,total_days,target_percent):
 	below_seventy = []
@@ -150,12 +169,10 @@ def main_menu(name): #main function to display main menu
 
 		if menu == "1":
 			filename , module_code = load_module("Attendance")
-			#print(f"Filename {filename} | Module Code {module_code}")
 			take_class_attendance(filename,module_code,"Attendance")
 		elif menu == "2":
 			filename , module_code = load_module("Statistics")
 			get_class_attendance(filename,module_code,"Statistics")
-			#print(f"Filename {filename} | Module Code {module_code}")
 		elif menu == "3":
 			break
 		else:
