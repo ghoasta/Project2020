@@ -1,20 +1,24 @@
+#App created by: Andrzej Sokolowski
+#R00184058
+#github: https://github.com/ghoasta/Project2020
+
 import sys #importing sys to be able to exit app on invalid creditentials in login function
 import datetime #importing to get the todays date
 
-def str_list_to_int_list(str_list):
+def str_list_to_int_list(str_list):#function to convert string list to int list
     i = 0
     while i < len(str_list):
         str_list[i] = int(str_list[i])
         i += 1
     return str_list 
 
-def create_student_list(filename):
+def create_student_list(filename):#function to create all lits used by app
 	student_list = []
 	present_list = []
 	absent_list = []
 	excused_list = []
 
-	with open (filename,'r') as f:
+	with open (filename,'r') as f:#slicing and creating lists
 		for line in f:
 			x = (line.split(',')[0].rstrip())
 			y = (line.split(',')[1].rstrip())
@@ -24,17 +28,17 @@ def create_student_list(filename):
 			present_list.append(y)
 			absent_list.append(z)
 			excused_list.append(q)
-	
+	#converting to int
 	present_list = str_list_to_int_list(present_list)
 	absent_list = str_list_to_int_list(absent_list)
 	excused_list = str_list_to_int_list(excused_list)
-
+	#calculating 70%
 	total_days= present_list[0]+excused_list[0]+absent_list[0]
 	target_percent = (70 * total_days)/100
 
 	return student_list,present_list,absent_list,excused_list,target_percent,total_days		
 
-def take_class_attendance(filename,module_code,purpose):
+def take_class_attendance(filename,module_code,purpose):#taking the attendance,saving it to lists and saving back to file
 	print(f"\nModule Record System({purpose}) {module_code}")
 	print("-"*30)
 	student_list,present_list,absent_list,excused_list,target_percent,total_days = create_student_list(filename)
@@ -58,12 +62,12 @@ def take_class_attendance(filename,module_code,purpose):
 				break
 			else:
 				print("Valid number only")	
-
+	#saving to file
 	output = open(filename,'w')
 	for i in range(len(student_list)):
 		print((student_list[i]+","+str(present_list[i])+","+str(absent_list[i])+","+str(excused_list[i])),file=output)
 
-def non_attander(student_list,present_list):
+def non_attander(student_list,present_list):#calculating students who did not attend
 	non_attander =[]
 	for i in range(len(student_list)):
 		if present_list[i] == 0:
@@ -72,14 +76,14 @@ def non_attander(student_list,present_list):
 		non_attander.append("None")
 	return non_attander	
 
-def calc_seventy_percent(student_list,absent_list,total_days,target_percent):
+def calc_seventy_percent(student_list,absent_list,total_days,target_percent):#calculating 70%
 	below_seventy = []
 	for i in range(len(absent_list)):
 		if absent_list[i] > (total_days - target_percent):
 			below_seventy.append(student_list[i])
 	return below_seventy			
 
-def calc_best_attendance(student_list,present_list,total_days):
+def calc_best_attendance(student_list,present_list,total_days):#calculating best attender
 	best_attendance = []
 	max_days = max(present_list)
 	for i in range(len(present_list)):
@@ -88,7 +92,7 @@ def calc_best_attendance(student_list,present_list,total_days):
 	return	best_attendance		
 
 
-def get_class_attendance(filename,module_code,purpose):
+def get_class_attendance(filename,module_code,purpose):#reading the attendance and saving stats file
 	student_list,present_list,absent_list,excused_list,target_percent,total_days = create_student_list(filename)
 	new_filename = module_code+"_"+(datetime.date.today().strftime("%d-%m-%Y"))+".txt"
 	below = (', '.join(calc_seventy_percent(student_list,absent_list,total_days,target_percent)))
@@ -120,7 +124,7 @@ def get_class_attendance(filename,module_code,purpose):
 	print(f"\t{best}")
 	print(f"\t{best}",file=output)
 
-def load_module(purpose):
+def load_module(purpose):#function to load module from module.txt
 	print(f"\nModule Record System({purpose}) - Choose a Module")
 	print("-"*30)	
 	modules_list = []
@@ -142,7 +146,7 @@ def load_module(purpose):
 			print("Please choose valid option")
 	return filename,module_code
 
-def login():
+def login():#login finction
 	name = input("\nName: ")
 	pwd = input("Password: ")
 	connection = open("login_data.txt")
@@ -160,7 +164,7 @@ def login():
 		if (name == name_list[i]) and (pwd == pwd_list[i]):
 			temp = i
 	if temp == -1:		
-		sys.exit("\nModule Record System – Login Failed")
+		sys.exit("\nModule Record System – Login Failed")#exit
 	else: 
 		return name_list[temp]	
 
@@ -185,8 +189,8 @@ def main_menu(name): #main function to display main menu
 		else:
 			print("\nPlease choose valid option")			
 			
-def main():
+def main():#main function, just to call login and main menu
 	name = login()
 	main_menu(name)
 
-main()	
+main()	#call main function
